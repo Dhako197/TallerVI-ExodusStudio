@@ -694,9 +694,10 @@ GameObject:
   m_Component:
   - component: {fileID: 493808}
   - component: {fileID: 9555494}
+  - component: {fileID: -6344532568521647182}
   m_Layer: 0
   m_Name: Test_Sniper
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -748,6 +749,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-6344532568521647182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 145724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9391b058ec8843840a3b631f70bacdcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  contador: 2
 --- !u!1 &147176
 GameObject:
   m_ObjectHideFlags: 0

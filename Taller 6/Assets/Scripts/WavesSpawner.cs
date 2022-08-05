@@ -19,14 +19,21 @@ public class WavesSpawner : MonoBehaviour
     public Wave[] waves;
     private int nextWave = 0;
 
-    public float timeBetweenWaves = 5f;
-    public float waveCountDown = 0f;
+    public Transform[] spawnPoints;
 
+    public float timeBetweenWaves = 5f;
+    private float waveCountDown = 0f;
+
+    private float searchCountdown=1f;
     private SpawnStates state = SpawnStates.COUNTING;
 
     void Start()
     {
         waveCountDown = timeBetweenWaves;
+        if (spawnPoints.Length == 0)
+        {
+            Debug.LogError("No sapwn points reference");
+        }
     }
 
     void Update()
@@ -34,7 +41,17 @@ public class WavesSpawner : MonoBehaviour
 
         if (state == SpawnStates.WAITING)
         {
-            // Chech enemys still alive
+            if (EnemyIsAlive()== false)
+            {
+                WaveCopleted();
+            }
+            else
+            {
+                
+                return;
+            }
+                
+                
         }
 
         if (waveCountDown <= 0)
@@ -43,21 +60,48 @@ public class WavesSpawner : MonoBehaviour
             {
                 StartCoroutine(SpawnWave(waves[nextWave]));
             }
-            else
-            {
-                waveCountDown -= Time.deltaTime;
-            }
+           
+        }
+        else
+        {
+            waveCountDown -= Time.deltaTime;
         }
     }
 
+
+
+    void WaveCopleted()
+    {
+        Debug.Log("Wave Completed");
+        state = SpawnStates.COUNTING;
+        waveCountDown = timeBetweenWaves;
+
+        if (nextWave + 1 > waves.Length - 1)
+        {
+            nextWave = 0;
+            Debug.Log("All waves complete"); // Poner el loop o fin de la partida
+        }
+        else
+        {
+            nextWave++;
+        }
+       
+    }
     bool EnemyIsAlive()
     {
-        if (GameObject.FindGameObjectsWithTag("Enemy") == null) return false;
-        else return true;
+        searchCountdown -= Time.deltaTime;
+        if (searchCountdown <= 0f)
+        {
+            searchCountdown = 1f;
+            if (GameObject.FindGameObjectWithTag("Enemy") == null) return false;
+        }
+        
+        return true;
     }
 
     IEnumerator SpawnWave(Wave _wave)
     {
+        Debug.Log("Spawning Wave:" + _wave.name);
         state = SpawnStates.SPAWING;
 
         for (int i = 0; i < _wave.count; i++)
@@ -72,7 +116,11 @@ public class WavesSpawner : MonoBehaviour
     }
 
     void SpawnEnemy(Transform _enemy)
-    {
+    {       
         Debug.Log("Spawning Enemy" + _enemy.name);
+        
+
+        Transform _sp = spawnPoints[Random.Range(0, spawnPoints.Length)];
+        Instantiate(_enemy, _sp.position,_sp.rotation);
     }
 }
